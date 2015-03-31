@@ -11,12 +11,31 @@
 |
 */
 
+/**
+ * Rota para a página principal
+ */
 Route::get('/', function()
 {
 	return View::make('hello');
 });
 
+/**
+ * Rota de Login
+ */
 Route::get('login', function()
 {
     return View::make('login');
+});
+
+
+/**
+ * Grupo de Rotas para a área administrativa
+ */
+Route::group(array('prefix'=>'admin', 'before'=> null), function()
+{
+    Route::get('/', array('uses' => 'UsersController@getIndex'));
+    
+    Route::controller('users','UsersController');
+    Route::controller('products','ProductsController');
+    
 });
