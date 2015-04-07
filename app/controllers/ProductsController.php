@@ -1,8 +1,8 @@
 <?php
 
-class ProductsController extends BaseController
+class ProductsController extends AbstractController
 {
-    public function getIndex()
+    public function __construct()
     {
         
     }
