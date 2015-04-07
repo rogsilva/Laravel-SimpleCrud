@@ -39,12 +39,9 @@ class UserModel extends Eloquent implements UserInterface, RemindableInterface {
         }
         
         
-        public function doInsert()
+        public function doInsert($input)
         {
-            $input = Input::all();
-            $user = new UserModel();
-            $input['password'] = Hash::make($input['password']);
-            $input['remember_token'] = Hash::make($input['email'].date('Y-m-d'));
+            $user = new UserModel();            
             $user->fill($input);
             if($user->save())
                 return $user;
@@ -52,12 +49,8 @@ class UserModel extends Eloquent implements UserInterface, RemindableInterface {
             return FALSE;
         }
         
-        public function doUpdate($id)
-        {
-            $input = Input::all();
-            if( isset($input['password']) ){
-                $input['password'] = Hash::make($input['password']);
-            }            
+        public function doUpdate($input, $id)
+        {                       
             $user = self::find($id);
             $user->fill($input);
             $user->updated_at = new \DateTime('now');
@@ -78,7 +71,7 @@ class UserModel extends Eloquent implements UserInterface, RemindableInterface {
 
         
 
-        public function roles()
+        public function rules()
         {
             return array(
                 'first_name' => 'required|min:3|max:45',
@@ -88,12 +81,13 @@ class UserModel extends Eloquent implements UserInterface, RemindableInterface {
             );
         }
         
-        public function rolesEdit($id = null)
+        public function rulesEdit($id = null)
         {
             return array(
                 'first_name' => 'required|min:3|max:45',
                 'last_name' => 'required|min:3|max:100',
                 'email' => "required|max:150|unique:{$this->table},email,{$id}|email",
+                'password' => 'confirmed',
             );
         }
 

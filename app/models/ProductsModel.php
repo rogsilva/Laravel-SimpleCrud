@@ -33,9 +33,8 @@ class ProductsModel extends Eloquent {
         }
         
         
-        public function doInsert()
+        public function doInsert($input)
         {
-            $input = Input::all();
             $product = new ProductsModel();
             $product->fill($input);
             if($product->save())
@@ -44,9 +43,8 @@ class ProductsModel extends Eloquent {
             return FALSE;
         }
         
-        public function doUpdate($id)
-        {
-            $input = Input::all();         
+        public function doUpdate($input, $id)
+        {      
             $product = self::find($id);
             $product->fill($input);
             $product->updated_at = new \DateTime('now');
@@ -67,7 +65,7 @@ class ProductsModel extends Eloquent {
 
         
 
-        public function roles()
+        public function rules()
         {
             return array(
                 'code' => 'required|min:6|max:6',
@@ -75,9 +73,9 @@ class ProductsModel extends Eloquent {
             );
         }
         
-        public function rolesEdit($id = null)
+        public function rulesEdit($id = null)
         {
-            return $this->roles();
+            return $this->rules();
         }
 
 }

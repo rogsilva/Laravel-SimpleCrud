@@ -21,13 +21,15 @@ abstract class AbstractController extends BaseController
     
     public function postNew()
     {      
-        $validator = Validator::make(Input::all(), $this->entity->roles());        
+        $inputs = Input::all();
+        
+        $validator = Validator::make($inputs, $this->entity->rules());        
         if($validator->fails()){
             return Redirect::to($this->indexRoute.'/new')
                             ->withErrors($validator)
                             ->withInput();
         }else{            
-            if($this->entity->doInsert()){
+            if($this->entity->doInsert($inputs)){
                 return Redirect::to($this->indexRoute)->with('message', "Cadastro realizado com sucesso");
             }                
         }      
@@ -41,13 +43,15 @@ abstract class AbstractController extends BaseController
     
     public function postEdit($id)
     {
-        $validator = Validator::make(Input::all(), $this->entity->rolesEdit($id));        
+        $inputs = Input::all();
+        
+        $validator = Validator::make($inputs, $this->entity->rulesEdit($id));        
         if($validator->fails()){
             return Redirect::to($this->indexRoute.'/edit/'.$id)
                             ->withErrors($validator)
                             ->withInput();
         }else{            
-            if($this->entity->doUpdate($id)){
+            if($this->entity->doUpdate($inputs, $id)){
                 return Redirect::to($this->indexRoute)->with('message', "Cadastro alterado com sucesso");
             }                
         }
