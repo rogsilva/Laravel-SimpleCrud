@@ -5,12 +5,12 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h2>Usuários</h2>
+        <h2>Produtos</h2>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <a href="{{ URL::to('admin/users/new') }}" class="btn btn-info" title="Novo Usuário"><i class="glyphicon glyphicon-plus"></i></a>
+        <a href="{{ URL::to('admin/products/new') }}" class="btn btn-info" title="Novo Produto"><i class="glyphicon glyphicon-plus"></i></a>
     </div>
 </div>
 @if(Session::get('message'))
@@ -25,24 +25,24 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
+                    <th>Código</th>
+                    <th>Descrição</th>
                     <th>Criado em</th>
                     <th>Atualizado em</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($result as $user)
+                @forelse($result as $product)
                 
                     <tr>
-                        <td>{{ $user->first_name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->created_at }}</td>
-                        <td>{{ $user->updated_at }}</td>
+                        <td>{{ $product->code }}</td>
+                        <td>{{ $product->description }}</td>
+                        <td>{{ $product->created_at }}</td>
+                        <td>{{ $product->updated_at }}</td>
                         <td>
-                            <a href="{{ URL::to("admin/users/edit", array($user->id)) }}" title="Editar"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a href="{{ URL::to("admin/users/delete", array($user->id)) }}" title="Remover" onclick="return confirm('Este registro será removido!')"><i class="glyphicon glyphicon-remove"></i></a>                            
+                            <a href="{{ URL::to("admin/products/edit", array($product->id)) }}" title="Editar"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a href="{{ URL::to("admin/products/delete", array($product->id)) }}" title="Remover" onclick="return confirm('Este registro será removido!')"><i class="glyphicon glyphicon-remove"></i></a>                            
                         </td>
                     </tr>
                 

@@ -6,7 +6,6 @@ class UsersController extends AbstractController
     {
         $this->entity = new UserModel();
         $this->viewFolder = 'users';
-        $this->controller = 'users';
         $this->indexRoute = 'admin/users';
         $this->numRowsResult = 15;
     }

@@ -4,7 +4,6 @@ abstract class AbstractController extends BaseController
 {
     
     protected $entity;
-    protected $controller;
     protected $viewFolder;
     protected $indexRoute;
     protected $numRowsResult;
@@ -24,7 +23,7 @@ abstract class AbstractController extends BaseController
     {      
         $validator = Validator::make(Input::all(), $this->entity->roles());        
         if($validator->fails()){
-            return Redirect::to('admin/'.$this->controller.'/new')
+            return Redirect::to($this->indexRoute.'/new')
                             ->withErrors($validator)
                             ->withInput();
         }else{            
@@ -36,22 +35,31 @@ abstract class AbstractController extends BaseController
     
     public function getEdit($id)
     {
-        
+        $entity = $this->entity->getFind($id);
+        return View::make("{$this->viewFolder}.edit", compact('entity'));
     }
     
-    public function postEdit()
+    public function postEdit($id)
     {
-        
+        $validator = Validator::make(Input::all(), $this->entity->rolesEdit($id));        
+        if($validator->fails()){
+            return Redirect::to($this->indexRoute.'/edit/'.$id)
+                            ->withErrors($validator)
+                            ->withInput();
+        }else{            
+            if($this->entity->doUpdate($id)){
+                return Redirect::to($this->indexRoute)->with('message', "Cadastro alterado com sucesso");
+            }                
+        }
     }
     
     public function getDelete($id)
     {
+        if($this->entity->doDelete($id)){
+            return Redirect::to($this->indexRoute)->with('message', "Cadastro removido com sucesso");
+        }
         
-    }
-    
-    public function postDelete()
-    {
-        
+        return Redirect::to($this->indexRoute);
     }
     
 }

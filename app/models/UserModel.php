@@ -33,6 +33,11 @@ class UserModel extends Eloquent implements UserInterface, RemindableInterface {
             return self::paginate($numRegs);
         }
         
+        public function getFind($id)
+        {
+            return self::find($id);
+        }
+        
         
         public function doInsert()
         {
@@ -46,6 +51,30 @@ class UserModel extends Eloquent implements UserInterface, RemindableInterface {
             
             return FALSE;
         }
+        
+        public function doUpdate($id)
+        {
+            $input = Input::all();
+            if( isset($input['password']) ){
+                $input['password'] = Hash::make($input['password']);
+            }            
+            $user = self::find($id);
+            $user->fill($input);
+            $user->updated_at = new \DateTime('now');
+            if($user->save())
+                return $user;
+            
+            return FALSE;
+        }
+        
+        public function doDelete($id)
+        {          
+            $user = self::find($id);
+            if($user)
+                return $user->delete();
+            
+            return false;
+        }
 
         
 
@@ -56,6 +85,15 @@ class UserModel extends Eloquent implements UserInterface, RemindableInterface {
                 'last_name' => 'required|min:3|max:100',
                 'email' => "required|max:150|unique:{$this->table}|email",
                 'password' => 'required|confirmed',
+            );
+        }
+        
+        public function rolesEdit($id = null)
+        {
+            return array(
+                'first_name' => 'required|min:3|max:45',
+                'last_name' => 'required|min:3|max:100',
+                'email' => "required|max:150|unique:{$this->table},email,{$id}|email",
             );
         }
 
